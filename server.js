@@ -35,24 +35,24 @@ function requestHandler(req, res) {
                 unoptimized: {
                     cssFiles: 3,
                     jsFiles: 3,
-                    eagerImages: 9,
+                    eagerImages: 4,
                     cachingPolicy: 'no-store, no-cache',
                     compression: 'None',
-                    totalCssBytes: 7220,
-                    totalJsBytes: 5718
+                    totalCssBytes: 6085,
+                    totalJsBytes: 3830
                 },
                 optimized: {
                     cssFiles: 1,
                     jsFiles: 1,
-                    lazyImages: 8,
+                    lazyImages: 3,
                     eagerImages: 1,
                     cachingPolicy: 'public, max-age=31536000, immutable',
                     compression: 'Gzip',
-                    totalCssBytes: 5525,
-                    totalJsBytes: 4498,
-                    cssSavingsPercent: '23.5%',
-                    jsSavingsPercent: '21.3%',
-                    overallBundleSavings: '22.5%'
+                    totalCssBytes: 4707,
+                    totalJsBytes: 2934,
+                    cssSavingsPercent: '22.6%',
+                    jsSavingsPercent: '23.4%',
+                    overallBundleSavings: '22.9%'
                 }
             }
         };

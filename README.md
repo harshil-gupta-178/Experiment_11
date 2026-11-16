@@ -85,9 +85,9 @@ Minification removes unnecessary characters from source code without altering fu
 ### Quantitative Results from `build.js`:
 | Asset Type | Original Size | Minified Size | Bytes Saved | Reduction |
 | :--- | :--- | :--- | :--- | :--- |
-| **CSS (3 files -> 1)** | 7,220 bytes | 5,525 bytes | 1,695 bytes | **23.5%** |
-| **JS (3 files -> 1)** | 5,718 bytes | 4,498 bytes | 1,220 bytes | **21.3%** |
-| **Total Bundle** | **12,938 bytes** | **10,023 bytes** | **2,915 bytes** | **22.5%** |
+| **CSS (3 files -> 1)** | 6,085 bytes | 4,707 bytes | 1,378 bytes | **22.6%** |
+| **JS (3 files -> 1)** | 3,830 bytes | 2,934 bytes | 896 bytes | **23.4%** |
+| **Total Bundle** | **9,915 bytes** | **7,641 bytes** | **2,274 bytes** | **22.9%** |
 
 In addition to payload reduction, the number of critical render-blocking requests was reduced from **6 requests** to **1 preloaded stylesheet** and **1 deferred script**.
 
@@ -138,7 +138,7 @@ In the unoptimized version, all 9 images are requested simultaneously on page lo
 | **Initial HTTP Requests** | 16 requests | 4 initial requests | **75% fewer requests** |
 | **Render-Blocking CSS** | 3 separate files | 1 preloaded bundle | **Eliminates 2 roundtrips** |
 | **JS Parser Blocking** | 3 synchronous tags | 1 deferred bundle | **Zero parser pause** |
-| **Initial Image Download** | 9 images (100% eager) | 1 hero image (89% deferred) | **>80% initial payload saved** |
+| **Initial Image Download** | 4 images (100% eager) | 1 hero image (75% deferred) | **>75% initial payload saved** |
 | **Repeat Visit Latency** | Full re-download | ~0 ms (from Disk Cache / SW) | **Near-instantaneous load** |
 | **Offline Capability** | Unavailable | Full offline PWA shell | **100% resilient** |
 

@@ -57,14 +57,9 @@ fs.writeFileSync(outCssPath, minifiedCSS);
 
 const optimizedGalleryJS = `
 var galleryItems = [
-    { id: 1, title: 'Edge CDN Network Nodes', category: 'Infrastructure', file: 'gallery-1.svg', lqip: 'gallery-1-lqip.svg', desc: 'Global point-of-presence cache distribution ensuring millisecond latencies.' },
-    { id: 2, title: 'Micro-Frontend Rendering', category: 'Architecture', file: 'gallery-2.svg', lqip: 'gallery-2-lqip.svg', desc: 'Isolating front-end packages and components for modular team delivery.' },
-    { id: 3, title: 'Asset Minification Pipeline', category: 'Build Systems', file: 'gallery-3.svg', lqip: 'gallery-3-lqip.svg', desc: 'Compressing AST trees, stripping symbols and reducing bundle payloads.' },
-    { id: 4, title: 'Service Worker Offline Cache', category: 'PWA', file: 'gallery-4.svg', lqip: 'gallery-4-lqip.svg', desc: 'Intercepting fetch queries to serve pre-cached shell assets instantaneously.' },
-    { id: 5, title: 'Intersection Observer Trigger', category: 'Browser APIs', file: 'gallery-5.svg', lqip: 'gallery-5-lqip.svg', desc: 'Monitoring DOM visibility intersections to stream lazy-bound resources.' },
-    { id: 6, title: 'Core Web Vitals Optimization', category: 'Performance', file: 'gallery-6.svg', lqip: 'gallery-6-lqip.svg', desc: 'Fine-tuning Largest Contentful Paint, Cumulative Layout Shift, and INP.' },
-    { id: 7, title: 'Browser Cache Hierarchy', category: 'HTTP Specs', file: 'gallery-7.svg', lqip: 'gallery-7-lqip.svg', desc: 'Multi-tiered storage balancing memory cache, disk cache, and revalidation.' },
-    { id: 8, title: 'HTTP/2 & HTTP/3 Multiplexing', category: 'Networking', file: 'gallery-8.svg', lqip: 'gallery-8-lqip.svg', desc: 'Simultaneous binary frame transfers across a single persistent TCP/QUIC stream.' }
+    { id: 1, title: 'Service Worker Cache', category: 'Caching', file: 'gallery-1.svg', lqip: 'gallery-1-lqip.svg', desc: 'Caching static assets for instantaneous repeat visits.' },
+    { id: 2, title: 'Asset Minification', category: 'Minification', file: 'gallery-2.svg', lqip: 'gallery-2-lqip.svg', desc: 'Compressing CSS and JavaScript to reduce transfer payload.' },
+    { id: 3, title: 'Lazy Loading Observer', category: 'Lazy Loading', file: 'gallery-3.svg', lqip: 'gallery-3-lqip.svg', desc: 'Loading images on demand as they enter the viewport.' }
 ];
 
 function initLazyLoading() {

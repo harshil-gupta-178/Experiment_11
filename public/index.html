@@ -322,8 +322,8 @@
             <div class="metric-card lazy">
                 <span class="metric-tag">Images</span>
                 <div class="metric-label">Lazy Loading</div>
-                <div class="metric-val">89% Deferred</div>
-                <div class="metric-desc">8 of 9 images deferred until viewport intersection with blur-up LQIP.</div>
+                <div class="metric-val">75% Deferred</div>
+                <div class="metric-desc">3 of 4 images deferred until viewport intersection with blur-up LQIP.</div>
             </div>
 
             <div class="metric-card overall">
@@ -346,7 +346,7 @@
                         <ul class="launch-features">
                             <li><span class="status-bullet red"></span> <strong>3 Separate CSS files</strong> (render-blocking)</li>
                             <li><span class="status-bullet red"></span> <strong>3 Separate JS files</strong> (parser-blocking, no defer)</li>
-                            <li><span class="status-bullet red"></span> <strong>9 Eagerly loaded images</strong> downloaded immediately</li>
+                            <li><span class="status-bullet red"></span> <strong>4 Eagerly loaded images</strong> downloaded immediately</li>
                             <li><span class="status-bullet red"></span> <strong>No Caching:</strong> <code>Cache-Control: no-store</code></li>
                             <li><span class="status-bullet red"></span> <strong>No Service Worker</strong>, no offline support</li>
                         </ul>
@@ -388,20 +388,20 @@
                     <tr>
                         <td><strong>CSS Delivery</strong></td>
                         <td>3 separate HTTP requests<br><span class="badge-pill badge-red">Uncompressed</span></td>
-                        <td>1 bundled &amp; minified request<br><span class="badge-pill badge-green">23.5% smaller</span></td>
+                        <td>1 bundled &amp; minified request<br><span class="badge-pill badge-green">22.6% smaller</span></td>
                         <td>Eliminates round-trip latency delays; removes render-blocking waterfall.</td>
                     </tr>
                     <tr>
                         <td><strong>JavaScript Execution</strong></td>
                         <td>3 synchronous scripts in body<br><span class="badge-pill badge-red">Parser-blocking</span></td>
-                        <td>1 minified bundle with <code>defer</code><br><span class="badge-pill badge-green">21.3% smaller</span></td>
+                        <td>1 minified bundle with <code>defer</code><br><span class="badge-pill badge-green">23.4% smaller</span></td>
                         <td>Allows the browser to parse HTML uninterrupted, optimizing First Contentful Paint.</td>
                     </tr>
                     <tr>
                         <td><strong>Image Loading Strategy</strong></td>
-                        <td>Eager loading for all 9 images<br><span class="badge-pill badge-red">Bandwidth intensive</span></td>
-                        <td>Native <code>loading="lazy"</code> + LQIP blur<br><span class="badge-pill badge-green">1 Eager Hero + 8 Deferred</span></td>
-                        <td>Saves >80% initial page payload; hero image has <code>fetchpriority="high"</code> for optimal LCP.</td>
+                        <td>Eager loading for all 4 images<br><span class="badge-pill badge-red">Bandwidth intensive</span></td>
+                        <td>Native <code>loading="lazy"</code> + LQIP blur<br><span class="badge-pill badge-green">1 Eager Hero + 3 Deferred</span></td>
+                        <td>Saves >75% initial page payload; hero image has <code>fetchpriority="high"</code> for optimal LCP.</td>
                     </tr>
                     <tr>
                         <td><strong>HTTP Cache Headers</strong></td>
