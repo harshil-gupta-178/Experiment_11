@@ -7,7 +7,8 @@ const PRECACHE_ASSETS = [
     './js/bundle.min.js',
     './images/hero.svg',
     './images/gallery-1-lqip.svg',
-    './images/gallery-2-lqip.svg'
+    './images/gallery-2-lqip.svg',
+    './images/gallery-3-lqip.svg'
 ];
 
 self.addEventListener('install', (event) => {
