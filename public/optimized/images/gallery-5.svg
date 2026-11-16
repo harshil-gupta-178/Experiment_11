@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 520" width="800" height="520">
+  <defs>
+    <linearGradient id="grad-gallery-5" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#06b6d4" />
+      <stop offset="50%" stop-color="#0e7490" />
+      <stop offset="100%" stop-color="#164e63" />
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+    </pattern>
+    
+  </defs>
+  <rect width="100%" height="100%" fill="url(#grad-gallery-5)" />
+  <rect width="100%" height="100%" fill="url(#grid)" opacity="1.0"/>
+  <g transform="translate(100, -10)" opacity="1.0">
+    <path d="M100 300s80-140 200-140 200 140 200 140-80 140-200 140-200-140-200-140z" fill="rgba(255,255,255,0.85)"/><circle cx="300" cy="300" r="60" fill="#0e7490"/><circle cx="300" cy="300" r="25" fill="#fff"/>
+  </g>
+  <rect x="0" y="410" width="800" height="110" fill="rgba(0,0,0,0.55)" />
+  <text x="32" y="458" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="24" font-weight="700" fill="#ffffff" letter-spacing="0.5">Intersection Observer Trigger</text>
+  <text x="32" y="490" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="500" fill="rgba(255,255,255,0.75)">Resolution: 800x520 | Format: SVG Vector | Category: Web Optimization</text>
+</svg>

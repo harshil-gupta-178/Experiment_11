@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Optimization Lab - Experiment 11</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --border: #e2e8f0;
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+            --radius: 12px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        header.hub-header {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #ffffff;
+            padding: 3rem 2rem;
+            border-bottom: 4px solid var(--primary);
+        }
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .badge {
+            display: inline-block;
+            background: rgba(37, 99, 235, 0.3);
+            border: 1px solid rgba(147, 197, 253, 0.5);
+            color: #93c5fd;
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 0.3rem 0.8rem;
+            border-radius: 9999px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.75rem;
+        }
+        h1.title {
+            font-size: 2.4rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.5rem;
+        }
+        p.subtitle {
+            font-size: 1.15rem;
+            color: #94a3b8;
+            max-width: 800px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2.5rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        .metric-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.75rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+            position: relative;
+            overflow: hidden;
+        }
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+        }
+        .metric-card.caching::before { background: #8b5cf6; }
+        .metric-card.minification::before { background: #3b82f6; }
+        .metric-card.lazy::before { background: #10b981; }
+        .metric-card.overall::before { background: #f59e0b; }
+
+        .metric-tag {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            background: #f1f5f9;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+        }
+        .metric-label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 0.05em;
+        }
+        .metric-val {
+            font-size: 1.85rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin: 0.25rem 0;
+        }
+        .metric-desc {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .launcher-section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+        }
+        .launcher-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 1.5rem;
+        }
+        .launch-card {
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .launch-card.unopt {
+            border-color: #fecaca;
+            background: #fff5f5;
+        }
+        .launch-card.opt {
+            border-color: #a7f3d0;
+            background: #f0fdf4;
+        }
+        .launch-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .launch-features {
+            text-align: left;
+            margin: 1.25rem 0;
+            font-size: 0.95rem;
+        }
+        .launch-features li {
+            margin-bottom: 0.4rem;
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .status-bullet {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+        .status-bullet.red { background-color: var(--danger); }
+        .status-bullet.green { background-color: var(--success); }
+
+        .btn {
+            display: inline-block;
+            padding: 0.85rem 1.75rem;
+            font-weight: 700;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .btn-danger {
+            background: var(--danger);
+            color: #fff;
+        }
+        .btn-danger:hover { background: #dc2626; }
+        .btn-success {
+            background: var(--success);
+            color: #fff;
+        }
+        .btn-success:hover { background: #059669; }
+
+        .table-section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+        }
+        .section-heading {
+            font-size: 1.6rem;
+            font-weight: 800;
+            margin-bottom: 0.75rem;
+        }
+        .section-subheading {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+        table.comp-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+        table.comp-table th, table.comp-table td {
+            padding: 1rem 1.25rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        table.comp-table th {
+            background: #f1f5f9;
+            color: var(--text-dark);
+            font-weight: 700;
+        }
+        table.comp-table tr:hover {
+            background: #f8fafc;
+        }
+        .badge-pill {
+            padding: 0.25rem 0.6rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+        .badge-red { background: #fee2e2; color: #991b1b; }
+        .badge-green { background: #dcfce7; color: #166534; }
+
+        .tab-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 0.5rem;
+        }
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-radius: 6px;
+        }
+        .tab-btn.active {
+            color: var(--primary);
+            background: #eff6ff;
+        }
+        .tab-pane { display: none; }
+        .tab-pane.active { display: block; }
+
+        pre {
+            background: #0f172a;
+            color: #f8fafc;
+            padding: 1.25rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 0.88rem;
+            line-height: 1.5;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem 1.5rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border);
+        }
+
+        @media (max-width: 768px) {
+            .launcher-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="hub-header">
+        <div class="header-content">
+            <span class="badge">Performance Engineering Lab &bull; Experiment 11</span>
+            <h1 class="title">Website Performance Optimization Portal</h1>
+            <p class="subtitle">
+                Demonstrating performance improvements through HTTP and Service Worker Caching, Automated CSS/JS Minification, and Progressive Image Lazy Loading.
+            </p>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <div class="metrics-grid">
+            <div class="metric-card caching">
+                <span class="metric-tag">Caching</span>
+                <div class="metric-label">Caching Policy</div>
+                <div class="metric-val">304 &bull; SW</div>
+                <div class="metric-desc">Immutable HTTP Headers and Service Worker Cache-First strategy.</div>
+            </div>
+
+            <div class="metric-card minification">
+                <span class="metric-tag">Bundle</span>
+                <div class="metric-label">Asset Minification</div>
+                <div class="metric-val">6 &rarr; 2 Files</div>
+                <div class="metric-desc">CSS and JS stripped of whitespace and bundled for deferred execution.</div>
+            </div>
+
+            <div class="metric-card lazy">
+                <span class="metric-tag">Images</span>
+                <div class="metric-label">Lazy Loading</div>
+                <div class="metric-val">89% Deferred</div>
+                <div class="metric-desc">8 of 9 images deferred until viewport intersection with blur-up LQIP.</div>
+            </div>
+
+            <div class="metric-card overall">
+                <span class="metric-tag">Latency</span>
+                <div class="metric-label">Repeat Visit Speed</div>
+                <div class="metric-val">~0 ms Latency</div>
+                <div class="metric-desc">Instantaneous offline and cached response from browser memory.</div>
+            </div>
+        </div>
+
+        <section class="launcher-section">
+            <h2 class="section-heading">Live Demonstration Environments</h2>
+            <p class="section-subheading">Launch both versions in your browser to inspect network requests, waterfall charts, and cache hits in DevTools.</p>
+
+            <div class="launcher-grid">
+                <div class="launch-card unopt">
+                    <div>
+                        <h3 class="launch-title" style="color: #b91c1c;">Unoptimized Baseline</h3>
+                        <p style="color: #7f1d1d; font-size: 0.9rem;">Web application before performance tuning.</p>
+                        <ul class="launch-features">
+                            <li><span class="status-bullet red"></span> <strong>3 Separate CSS files</strong> (render-blocking)</li>
+                            <li><span class="status-bullet red"></span> <strong>3 Separate JS files</strong> (parser-blocking, no defer)</li>
+                            <li><span class="status-bullet red"></span> <strong>9 Eagerly loaded images</strong> downloaded immediately</li>
+                            <li><span class="status-bullet red"></span> <strong>No Caching:</strong> <code>Cache-Control: no-store</code></li>
+                            <li><span class="status-bullet red"></span> <strong>No Service Worker</strong>, no offline support</li>
+                        </ul>
+                    </div>
+                    <a href="/unoptimized/" target="_blank" class="btn btn-danger">Launch Unoptimized Site &rarr;</a>
+                </div>
+
+                <div class="launch-card opt">
+                    <div>
+                        <h3 class="launch-title" style="color: #047857;">Optimized High-Speed Site</h3>
+                        <p style="color: #064e3b; font-size: 0.9rem;">Tuned with modern web performance patterns and service workers.</p>
+                        <ul class="launch-features">
+                            <li><span class="status-bullet green"></span> <strong>1 Minified CSS bundle</strong> (preloaded in head)</li>
+                            <li><span class="status-bullet green"></span> <strong>1 Minified JS bundle</strong> (deferred parsing)</li>
+                            <li><span class="status-bullet green"></span> <strong>Progressive Image Lazy Loading</strong> (IntersectionObserver + LQIP)</li>
+                            <li><span class="status-bullet green"></span> <strong>HTTP Caching:</strong> <code>max-age=31536000, immutable</code> + ETag (304)</li>
+                            <li><span class="status-bullet green"></span> <strong>PWA Service Worker:</strong> Cache-First shell architecture</li>
+                        </ul>
+                    </div>
+                    <a href="/optimized/" target="_blank" class="btn btn-success">Launch Optimized Site &rarr;</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="table-section">
+            <h2 class="section-heading">Side-by-Side Architectural Audit</h2>
+            <p class="section-subheading">Quantitative comparison of the optimizations applied to the website.</p>
+
+            <table class="comp-table">
+                <thead>
+                    <tr>
+                        <th>Optimization Dimension</th>
+                        <th>Unoptimized Baseline</th>
+                        <th>Optimized Architecture</th>
+                        <th>Impact / Benefit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>CSS Delivery</strong></td>
+                        <td>3 separate HTTP requests<br><span class="badge-pill badge-red">Uncompressed</span></td>
+                        <td>1 bundled &amp; minified request<br><span class="badge-pill badge-green">23.5% smaller</span></td>
+                        <td>Eliminates round-trip latency delays; removes render-blocking waterfall.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>JavaScript Execution</strong></td>
+                        <td>3 synchronous scripts in body<br><span class="badge-pill badge-red">Parser-blocking</span></td>
+                        <td>1 minified bundle with <code>defer</code><br><span class="badge-pill badge-green">21.3% smaller</span></td>
+                        <td>Allows the browser to parse HTML uninterrupted, optimizing First Contentful Paint.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Image Loading Strategy</strong></td>
+                        <td>Eager loading for all 9 images<br><span class="badge-pill badge-red">Bandwidth intensive</span></td>
+                        <td>Native <code>loading="lazy"</code> + LQIP blur<br><span class="badge-pill badge-green">1 Eager Hero + 8 Deferred</span></td>
+                        <td>Saves >80% initial page payload; hero image has <code>fetchpriority="high"</code> for optimal LCP.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>HTTP Cache Headers</strong></td>
+                        <td><code>Cache-Control: no-store</code><br><span class="badge-pill badge-red">Re-downloads on every refresh</span></td>
+                        <td><code>Cache-Control: public, max-age=31536000, immutable</code><br><span class="badge-pill badge-green">ETag &amp; 304 Validation</span></td>
+                        <td>Zero network payload on repeat visits; instant cached display from disk/memory.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Offline / PWA Layer</strong></td>
+                        <td>None<br><span class="badge-pill badge-red">No Service Worker</span></td>
+                        <td>Service Worker (<code>sw.js</code>)<br><span class="badge-pill badge-green">Cache-First &amp; Stale-While-Revalidate</span></td>
+                        <td>Full offline availability; instantaneous page navigation from Cache Storage API.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="table-section">
+            <h2 class="section-heading">Implementation Snippets & Code Artifacts</h2>
+            <p class="section-subheading">Code implementations for each optimization pillar.</p>
+
+            <div class="tab-buttons">
+                <button class="tab-btn active" onclick="showTab('tab-caching')">1. Caching &amp; Headers</button>
+                <button class="tab-btn" onclick="showTab('tab-minification')">2. Minification &amp; Bundling</button>
+                <button class="tab-btn" onclick="showTab('tab-lazy')">3. Image Lazy Loading</button>
+                <button class="tab-btn" onclick="showTab('tab-sw')">4. Service Worker (sw.js)</button>
+            </div>
+
+            <div id="tab-caching" class="tab-pane active">
+                <pre><code>if (isOptimizedRoute) {
+    const etag = generateETag(fileContent);
+    headers['ETag'] = etag;
+    headers['Last-Modified'] = fileStat.mtime.toUTCString();
+
+    if (ext === '.html') {
+        headers['Cache-Control'] = 'no-cache, must-revalidate';
+    } else {
+        headers['Cache-Control'] = 'public, max-age=31536000, immutable';
+    }
+
+    if (req.headers['if-none-match'] === etag) {
+        res.writeHead(304, headers);
+        res.end();
+        return;
+    }
+}</code></pre>
+            </div>
+
+            <div id="tab-minification" class="tab-pane">
+                <pre><code>function minifyCSS(cssContent) {
+    return cssContent
+        .replace(/\/\*[\s\S]*?\*\//g, '')
+        .replace(/\s*([\{\}\:\;\,>])\s*/g, '$1')
+        .trim()
+        .replace(/;\}/g, '}')
+        .replace(/\s+/g, ' ');
+}
+
+const linkTag = '&lt;link rel="stylesheet" href="css/style.min.css"&gt;';
+const scriptTag = '&lt;script defer src="js/bundle.min.js"&gt;&lt;/script&gt;';</code></pre>
+            </div>
+
+            <div id="tab-lazy" class="tab-pane">
+                <pre><code>&lt;div class="card-image-wrap"&gt;
+    &lt;img 
+        class="progressive-lazy lazy-loading" 
+        src="images/gallery-1-lqip.svg" 
+        data-src="images/gallery-1.svg" 
+        alt="Edge CDN Network Nodes" 
+        width="800" 
+        height="520" 
+        loading="lazy" 
+        decoding="async" 
+    /&gt;
+&lt;/div&gt;
+
+var observer = new IntersectionObserver((entries) =&gt; {
+    entries.forEach(entry =&gt; {
+        if (entry.isIntersecting) {
+            var img = entry.target;
+            img.src = img.dataset.src;
+            img.onload = () =&gt; img.classList.replace('lazy-loading', 'lazy-loaded');
+            observer.unobserve(img);
+        }
+    });
+}, { rootMargin: '50px 0px' });</code></pre>
+            </div>
+
+            <div id="tab-sw" class="tab-pane">
+                <pre><code>self.addEventListener('fetch', (event) => {
+    const request = event.request;
+    if (request.destination === 'image' || request.destination === 'style' || request.destination === 'script') {
+        event.respondWith(
+            caches.match(request).then((cachedResponse) => {
+                if (cachedResponse) {
+                    return cachedResponse;
+                }
+                return fetch(request).then((networkResponse) => {
+                    const clone = networkResponse.clone();
+                    caches.open('cloudscale-cache-v1').then(cache => cache.put(request, clone));
+                    return networkResponse;
+                });
+            })
+        );
+    }
+});</code></pre>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Web Performance Engineering Lab &bull; Experiment 11</p>
+    </footer>
+
+    <script>
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>

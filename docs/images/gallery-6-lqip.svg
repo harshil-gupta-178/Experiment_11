@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 80" width="120" height="80">
+  <defs>
+    <linearGradient id="grad-gallery-6" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#84cc16" />
+      <stop offset="50%" stop-color="#4d7c0f" />
+      <stop offset="100%" stop-color="#365314" />
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+    </pattern>
+    <filter id="blur"><feGaussianBlur stdDeviation="15"/></filter>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#grad-gallery-6)" filter="url(#blur)"/>
+  <rect width="100%" height="100%" fill="url(#grid)" opacity="0.6"/>
+  <g transform="translate(-240, -230)" opacity="0.6">
+    <polygon points="340,80 160,320 280,320 240,520 440,260 310,260" fill="rgba(255,255,255,0.9)"/>
+  </g>
+  <rect x="0" y="-30" width="120" height="110" fill="rgba(0,0,0,0.55)" />
+  <text x="32" y="18" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="24" font-weight="700" fill="#ffffff" letter-spacing="0.5">Core Web Vitals Optimization</text>
+  <text x="32" y="50" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="500" fill="rgba(255,255,255,0.75)">Resolution: 120x80 | Format: SVG Vector | Category: Web Optimization</text>
+</svg>

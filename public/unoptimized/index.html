@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CloudScale Hub - Unoptimized Baseline</title>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-container">
+            <div class="brand-logo">
+                <span>CloudScale Hub</span>
+                <span class="brand-badge">Unoptimized Mode</span>
+            </div>
+            <nav class="nav-links">
+                <a href="/" class="nav-link">&larr; Performance Hub</a>
+                <a href="/optimized/" class="nav-link" style="color: #10b981; font-weight: bold;">Switch to Optimized &rarr;</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <aside class="diagnostics-banner">
+            <div class="diagnostics-status">
+                <span class="pulse-dot"></span>
+                <span><strong>Status:</strong> Unoptimized Baseline (3 CSS + 3 JS files, Eager Images, No-Store Caching)</span>
+            </div>
+            <div>
+                <span>Load Time: <strong id="load-time-metric">Measuring...</strong></span>
+            </div>
+        </aside>
+
+        <section class="hero-section">
+            <div class="hero-text">
+                <h1 class="hero-title">High-Performance Cloud Engineering Hub</h1>
+                <p class="hero-description">
+                    This page demonstrates an unoptimized web application. It makes multiple render-blocking asset requests, transmits uncompressed source files, downloads all images immediately on load, and disables browser caching.
+                </p>
+                <div class="hero-actions">
+                    <a href="/optimized/" class="btn btn-primary">View Optimized Version</a>
+                    <a href="/" class="btn btn-secondary">Open Comparison Hub</a>
+                </div>
+            </div>
+            <div class="hero-media">
+                <img src="images/hero.svg" alt="Hero Architecture Diagram" />
+            </div>
+        </section>
+
+        <section class="gallery-section">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">Core Systems Gallery</h2>
+                    <p class="section-subtitle">Images are downloaded immediately at parse time without lazy loading.</p>
+                </div>
+            </div>
+            <div class="gallery-grid" id="gallery-grid"></div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p>&copy; 2026 CloudScale Web Performance Lab. Unoptimized Baseline.</p>
+    </footer>
+
+    <script src="js/utils.js"></script>
+    <script src="js/gallery.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

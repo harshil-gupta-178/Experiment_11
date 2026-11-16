@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CloudScale Hub - Fully Optimized</title>
+    <link rel="preload" href="css/style.min.css" as="style">
+    <link rel="preload" href="images/hero.svg" as="image">
+    <link rel="stylesheet" href="css/style.min.css">
+    <script defer src="js/bundle.min.js"></script>
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-container">
+            <div class="brand-logo">
+                <span>CloudScale Hub</span>
+                <span class="brand-badge" style="background-color: #10b981;">Optimized</span>
+            </div>
+            <nav class="nav-links">
+                <a href="#optimizations" class="nav-link">Optimizations</a>
+                <a href="#gallery-grid" class="nav-link">Gallery</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <aside class="diagnostics-banner" id="optimizations" style="background-color: #ecfdf5; border-color: #a7f3d0; color: #065f46;">
+            <div class="diagnostics-status">
+                <span class="pulse-dot" style="background-color: #10b981;"></span>
+                <span><strong>Active Optimizations:</strong> Minified CSS/JS Bundle, Service Worker Caching, Lazy Loaded Images</span>
+            </div>
+            <div style="display: flex; gap: 1.5rem; font-size: 0.9rem;">
+                <span>Page Load: <strong id="load-time-metric">Measuring...</strong></span>
+                <span>Service Worker: <strong id="sw-status">Initializing...</strong></span>
+            </div>
+        </aside>
+
+        <section class="hero-section">
+            <div class="hero-text">
+                <h1 class="hero-title">High-Performance Cloud Engineering Hub</h1>
+                <p class="hero-description">
+                    This optimized edition delivers fast loading performance: 1 minified stylesheet, 1 deferred JavaScript bundle, Service Worker client-side caching with HTTP immutable headers, and progressive image lazy loading.
+                </p>
+                <div class="hero-actions">
+                    <a href="#gallery-grid" class="btn btn-primary" style="background-color: #10b981;">Explore Gallery</a>
+                    <a href="#optimizations" class="btn btn-secondary">View Optimizations</a>
+                </div>
+            </div>
+            <div class="hero-media">
+                <img src="images/hero.svg" alt="Hero Architecture Diagram" width="800" height="520" fetchpriority="high" />
+            </div>
+        </section>
+
+        <section class="gallery-section">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">Core Systems Gallery</h2>
+                    <p class="section-subtitle">Images below load progressively on demand as they scroll into view.</p>
+                </div>
+            </div>
+            <div class="gallery-grid" id="gallery-grid"></div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p>&copy; 2026 CloudScale Web Performance Lab. Fully Optimized.</p>
+    </footer>
+</body>
+</html>
