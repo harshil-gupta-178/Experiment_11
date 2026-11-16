@@ -32,14 +32,23 @@ cssFiles.forEach(file => {
 const progressiveLazyStyles = `
 .card-image-wrap {
     position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    background-color: #ffffff;
     overflow: hidden;
-    background: #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
 }
 .card-image-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
     transition: opacity 0.4s ease-in-out, filter 0.4s ease-in-out;
 }
 .card-image-wrap img.lazy-loading {
-    filter: blur(10px);
+    filter: blur(8px);
     opacity: 0.6;
 }
 .card-image-wrap img.lazy-loaded {
@@ -57,9 +66,9 @@ fs.writeFileSync(outCssPath, minifiedCSS);
 
 const optimizedGalleryJS = `
 var galleryItems = [
-    { id: 1, title: 'Service Worker Cache', category: 'Caching', file: 'gallery-1.svg', lqip: 'gallery-1-lqip.svg', desc: 'Caching static assets for instantaneous repeat visits.' },
-    { id: 2, title: 'Asset Minification', category: 'Minification', file: 'gallery-2.svg', lqip: 'gallery-2-lqip.svg', desc: 'Compressing CSS and JavaScript to reduce transfer payload.' },
-    { id: 3, title: 'Lazy Loading Observer', category: 'Lazy Loading', file: 'gallery-3.svg', lqip: 'gallery-3-lqip.svg', desc: 'Loading images on demand as they enter the viewport.' }
+    { id: 1, title: 'Service Worker Cache', category: 'Caching', file: 'gallery-1.png', lqip: 'gallery-1-lqip.svg', desc: 'Caching static assets for instantaneous repeat visits.' },
+    { id: 2, title: 'Asset Minification', category: 'Minification', file: 'gallery-2.png', lqip: 'gallery-2-lqip.svg', desc: 'Compressing CSS and JavaScript to reduce transfer payload.' },
+    { id: 3, title: 'Lazy Loading Observer', category: 'Lazy Loading', file: 'gallery-3.jpg', lqip: 'gallery-3-lqip.svg', desc: 'Loading images on demand as they enter the viewport.' }
 ];
 
 function initLazyLoading() {
@@ -99,7 +108,7 @@ function renderOptimizedGallery(targetId) {
     galleryItems.forEach(function(item) {
         html += '<article class="card">';
         html += '  <div class="card-image-wrap">';
-        html += '    <img class="progressive-lazy lazy-loading" src="images/' + item.lqip + '" data-src="images/' + item.file + '" alt="' + item.title + '" width="800" height="520" loading="lazy" decoding="async" />';
+        html += '    <img class="progressive-lazy lazy-loading" src="images/' + item.lqip + '" data-src="images/' + item.file + '" alt="' + item.title + '" loading="lazy" decoding="async" />';
         html += '  </div>';
         html += '  <div class="card-body">';
         html += '    <span class="card-tag">' + item.category + '</span>';

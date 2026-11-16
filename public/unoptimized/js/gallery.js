@@ -1,7 +1,7 @@
 var galleryItems = [
-    { id: 1, title: 'Service Worker Cache', category: 'Caching', file: 'gallery-1.svg', desc: 'Caching static assets for instantaneous repeat visits.' },
-    { id: 2, title: 'Asset Minification', category: 'Minification', file: 'gallery-2.svg', desc: 'Compressing CSS and JavaScript to reduce transfer payload.' },
-    { id: 3, title: 'Lazy Loading Observer', category: 'Lazy Loading', file: 'gallery-3.svg', desc: 'Loading images on demand as they enter the viewport.' }
+    { id: 1, title: 'Service Worker Cache', category: 'Caching', file: 'gallery-1.png', desc: 'Caching static assets for instantaneous repeat visits.' },
+    { id: 2, title: 'Asset Minification', category: 'Minification', file: 'gallery-2.png', desc: 'Compressing CSS and JavaScript to reduce transfer payload.' },
+    { id: 3, title: 'Lazy Loading Observer', category: 'Lazy Loading', file: 'gallery-3.jpg', desc: 'Loading images on demand as they enter the viewport.' }
 ];
 
 function renderGallery(targetElementId) {
