@@ -1,4 +1,4 @@
-const CACHE_NAME = 'cloudscale-cache-v1';
+const CACHE_NAME = 'cloudscale-cache-v2';
 
 const PRECACHE_ASSETS = [
     './',
@@ -6,9 +6,9 @@ const PRECACHE_ASSETS = [
     './css/style.min.css',
     './js/bundle.min.js',
     './images/hero.jpg',
-    './images/gallery-1-lqip.svg',
-    './images/gallery-2-lqip.svg',
-    './images/gallery-3-lqip.svg'
+    './images/gallery-1.png',
+    './images/gallery-2.png',
+    './images/gallery-3.jpg'
 ];
 
 self.addEventListener('install', (event) => {
@@ -41,6 +41,21 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
+    if (request.mode === 'navigate' || request.destination === 'document') {
+        event.respondWith(
+            fetch(request)
+                .then((networkResponse) => {
+                    if (networkResponse && networkResponse.status === 200) {
+                        const copy = networkResponse.clone();
+                        caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
+                    }
+                    return networkResponse;
+                })
+                .catch(() => caches.match(request))
+        );
+        return;
+    }
+
     if (
         request.destination === 'image' ||
         request.destination === 'style' ||
@@ -70,17 +85,6 @@ self.addEventListener('fetch', (event) => {
     }
 
     event.respondWith(
-        caches.open(CACHE_NAME).then((cache) => {
-            return cache.match(request).then((cachedResponse) => {
-                const fetchPromise = fetch(request).then((networkResponse) => {
-                    if (networkResponse && networkResponse.status === 200) {
-                        cache.put(request, networkResponse.clone());
-                    }
-                    return networkResponse;
-                }).catch(() => cachedResponse);
-
-                return cachedResponse || fetchPromise;
-            });
-        })
+        fetch(request).catch(() => caches.match(request))
     );
 });

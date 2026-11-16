@@ -45,15 +45,6 @@ const progressiveLazyStyles = `
     width: 100%;
     height: 100%;
     object-fit: contain;
-    transition: opacity 0.4s ease-in-out, filter 0.4s ease-in-out;
-}
-.card-image-wrap img.lazy-loading {
-    filter: blur(8px);
-    opacity: 0.6;
-}
-.card-image-wrap img.lazy-loaded {
-    filter: blur(0);
-    opacity: 1;
 }
 `;
 
@@ -65,72 +56,17 @@ const outCssPath = path.join(__dirname, 'public', 'optimized', 'css', 'style.min
 fs.writeFileSync(outCssPath, minifiedCSS);
 
 const optimizedGalleryJS = `
-var galleryItems = [
-    { id: 1, title: 'Service Worker Cache', category: 'Caching', file: 'gallery-1.png', lqip: 'gallery-1-lqip.svg', desc: 'Caching static assets for instantaneous repeat visits.' },
-    { id: 2, title: 'Asset Minification', category: 'Minification', file: 'gallery-2.png', lqip: 'gallery-2-lqip.svg', desc: 'Compressing CSS and JavaScript to reduce transfer payload.' },
-    { id: 3, title: 'Lazy Loading Observer', category: 'Lazy Loading', file: 'gallery-3.jpg', lqip: 'gallery-3-lqip.svg', desc: 'Loading images on demand as they enter the viewport.' }
-];
-
-function initLazyLoading() {
-    var lazyImages = [].slice.call(document.querySelectorAll('img.progressive-lazy'));
-    if ('IntersectionObserver' in window) {
-        var imageObserver = new IntersectionObserver(function(entries, observer) {
-            entries.forEach(function(entry) {
-                if (entry.isIntersecting) {
-                    var image = entry.target;
-                    var fullSrc = image.getAttribute('data-src');
-                    if (fullSrc) {
-                        image.src = fullSrc;
-                        image.onload = function() {
-                            image.classList.remove('lazy-loading');
-                            image.classList.add('lazy-loaded');
-                        };
-                    }
-                    imageObserver.unobserve(image);
-                }
-            });
-        }, { rootMargin: '50px 0px' });
-
-        lazyImages.forEach(function(image) {
-            imageObserver.observe(image);
-        });
-    } else {
-        lazyImages.forEach(function(image) {
-            image.src = image.getAttribute('data-src');
-        });
-    }
-}
-
-function renderOptimizedGallery(targetId) {
-    var container = document.getElementById(targetId);
-    if (!container) return;
-    var html = '';
-    galleryItems.forEach(function(item) {
-        html += '<article class="card">';
-        html += '  <div class="card-image-wrap">';
-        html += '    <img class="progressive-lazy lazy-loading" src="images/' + item.lqip + '" data-src="images/' + item.file + '" alt="' + item.title + '" loading="lazy" decoding="async" />';
-        html += '  </div>';
-        html += '  <div class="card-body">';
-        html += '    <span class="card-tag">' + item.category + '</span>';
-        html += '    <h3 class="card-title">' + item.title + '</h3>';
-        html += '    <p class="card-text">' + item.desc + '</p>';
-        html += '  </div>';
-        html += '</article>';
-    });
-    container.innerHTML = html;
-    initLazyLoading();
-}
-
 function registerServiceWorker() {
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('sw.js').catch(function(err) {});
     }
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    renderOptimizedGallery('gallery-grid');
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', registerServiceWorker);
+} else {
     registerServiceWorker();
-});
+}
 `;
 
 const jsDir = path.join(__dirname, 'public', 'unoptimized', 'js');
