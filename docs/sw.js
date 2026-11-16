@@ -5,7 +5,7 @@ const PRECACHE_ASSETS = [
     './index.html',
     './css/style.min.css',
     './js/bundle.min.js',
-    './images/hero.svg',
+    './images/hero.jpg',
     './images/gallery-1-lqip.svg',
     './images/gallery-2-lqip.svg',
     './images/gallery-3-lqip.svg'
