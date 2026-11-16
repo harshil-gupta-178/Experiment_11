@@ -46,19 +46,6 @@ const progressiveLazyStyles = `
     filter: blur(0);
     opacity: 1;
 }
-.lazy-badge {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    background: rgba(16, 185, 129, 0.9);
-    color: #fff;
-    font-size: 11px;
-    font-weight: 700;
-    padding: 3px 8px;
-    border-radius: 4px;
-    pointer-events: none;
-    z-index: 2;
-}
 `;
 
 const unminifiedCSSContent = combinedCSS + progressiveLazyStyles;
@@ -93,8 +80,6 @@ function initLazyLoading() {
                         image.onload = function() {
                             image.classList.remove('lazy-loading');
                             image.classList.add('lazy-loaded');
-                            var badge = image.parentElement.querySelector('.lazy-badge');
-                            if (badge) badge.innerText = 'Loaded';
                         };
                     }
                     imageObserver.unobserve(image);
@@ -119,7 +104,6 @@ function renderOptimizedGallery(targetId) {
     galleryItems.forEach(function(item) {
         html += '<article class="card">';
         html += '  <div class="card-image-wrap">';
-        html += '    <span class="lazy-badge">Pending</span>';
         html += '    <img class="progressive-lazy lazy-loading" src="images/' + item.lqip + '" data-src="images/' + item.file + '" alt="' + item.title + '" width="800" height="520" loading="lazy" decoding="async" />';
         html += '  </div>';
         html += '  <div class="card-body">';
@@ -135,25 +119,13 @@ function renderOptimizedGallery(targetId) {
 
 function registerServiceWorker() {
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js')
-            .then(function(reg) {
-                var swStatus = document.getElementById('sw-status');
-                if (swStatus) swStatus.innerText = 'Active (Cache-First Enabled)';
-            })
-            .catch(function(err) {});
+        navigator.serviceWorker.register('sw.js').catch(function(err) {});
     }
 }
 
 document.addEventListener('DOMContentLoaded', function() {
     renderOptimizedGallery('gallery-grid');
     registerServiceWorker();
-    
-    window.addEventListener('load', function() {
-        var timing = window.performance.timing;
-        var loadTime = timing.loadEventEnd - timing.navigationStart;
-        var metricDisplay = document.getElementById('load-time-metric');
-        if (metricDisplay) metricDisplay.innerText = loadTime + ' ms';
-    });
 });
 `;
 
