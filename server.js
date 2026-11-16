@@ -61,10 +61,10 @@ function requestHandler(req, res) {
         return;
     }
 
-    if (pathname.endsWith('/')) {
+    if (pathname === '/' || pathname === '/index.html') {
+        pathname = '/optimized/index.html';
+    } else if (pathname.endsWith('/')) {
         pathname += 'index.html';
-    } else if (pathname === '') {
-        pathname = '/index.html';
     }
 
     let filePath = path.join(PUBLIC_DIR, pathname);

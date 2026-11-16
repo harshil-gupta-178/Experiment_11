@@ -1,4 +1,4 @@
-const CACHE_NAME = 'cloudscale-cache-v2';
+const CACHE_NAME = 'cloudscale-cache-v5';
 
 const PRECACHE_ASSETS = [
     './',
@@ -6,9 +6,13 @@ const PRECACHE_ASSETS = [
     './css/style.min.css',
     './js/bundle.min.js',
     './images/hero.jpg',
+    './images/hero.svg',
     './images/gallery-1.png',
+    './images/gallery-1.svg',
     './images/gallery-2.png',
-    './images/gallery-3.jpg'
+    './images/gallery-2.svg',
+    './images/gallery-3.jpg',
+    './images/gallery-3.svg'
 ];
 
 self.addEventListener('install', (event) => {
@@ -56,35 +60,15 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    if (
-        request.destination === 'image' ||
-        request.destination === 'style' ||
-        request.destination === 'script' ||
-        url.pathname.includes('/css/') ||
-        url.pathname.includes('/js/') ||
-        url.pathname.includes('/images/')
-    ) {
-        event.respondWith(
-            caches.match(request).then((cachedResponse) => {
-                if (cachedResponse) {
-                    return cachedResponse;
-                }
-                return fetch(request).then((networkResponse) => {
-                    if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
-                        return networkResponse;
-                    }
-                    const responseToCache = networkResponse.clone();
-                    caches.open(CACHE_NAME).then((cache) => {
-                        cache.put(request, responseToCache);
-                    });
-                    return networkResponse;
-                });
-            })
-        );
-        return;
-    }
-
     event.respondWith(
-        fetch(request).catch(() => caches.match(request))
+        fetch(request)
+            .then((networkResponse) => {
+                if (networkResponse && networkResponse.status === 200) {
+                    const copy = networkResponse.clone();
+                    caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
+                }
+                return networkResponse;
+            })
+            .catch(() => caches.match(request))
     );
 });

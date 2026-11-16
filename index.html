@@ -3,13 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="refresh" content="0; url=docs/">
-    <title>Redirecting to Optimized Site</title>
+    <title>CloudScale - Fully Optimized</title>
+    <link rel="preload" href="css/style.min.css" as="style">
+    <link rel="preload" href="images/hero.jpg?v=5" as="image">
+    <link rel="stylesheet" href="css/style.min.css">
     <script>
-        window.location.replace("docs/");
+        if ('caches' in window) {
+            caches.keys().then(function(names) {
+                for (var i = 0; i < names.length; i++) {
+                    if (names[i] !== 'cloudscale-cache-v5') {
+                        caches.delete(names[i]);
+                    }
+                }
+            });
+        }
     </script>
+    <script defer src="js/bundle.min.js"></script>
 </head>
 <body>
-    <p>Loading optimized site... If you are not redirected, <a href="docs/">click here</a>.</p>
+    <header class="site-header">
+        <div class="header-container">
+            <div class="brand-logo">
+                <span>CloudScale</span>
+                <span class="brand-badge" style="background-color: #10b981;">Optimized</span>
+            </div>
+            <nav class="nav-links">
+                <a href="#gallery-grid" class="nav-link">Gallery</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <section class="hero-section">
+            <div class="hero-text">
+                <h1 class="hero-title">High-Performance Cloud Engineering</h1>
+                <p class="hero-description">
+                    This optimized edition delivers fast loading performance: 1 minified stylesheet, 1 deferred JavaScript bundle, Service Worker client-side caching with HTTP immutable headers, and progressive image lazy loading.
+                </p>
+                <div class="hero-actions">
+                    <a href="#gallery-grid" class="btn btn-primary" style="background-color: #10b981;">Explore Gallery</a>
+                </div>
+            </div>
+            <div class="hero-media">
+                <img src="images/hero.jpg?v=5" alt="Cloud Network Architecture" width="612" height="344" fetchpriority="high" />
+            </div>
+        </section>
+
+        <section class="gallery-section">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">Core Systems Gallery</h2>
+                    <p class="section-subtitle">Images below load progressively on demand as they scroll into view.</p>
+                </div>
+            </div>
+            <div class="gallery-grid" id="gallery-grid">
+                <article class="card">
+                    <div class="card-image-wrap">
+                        <img src="images/gallery-1.png?v=5" alt="Service Worker Cache" loading="lazy" decoding="async" />
+                    </div>
+                    <div class="card-body">
+                        <span class="card-tag">Caching</span>
+                        <h3 class="card-title">Service Worker Cache</h3>
+                        <p class="card-text">Caching static assets for instantaneous repeat visits.</p>
+                    </div>
+                </article>
+                <article class="card">
+                    <div class="card-image-wrap">
+                        <img src="images/gallery-2.png?v=5" alt="Asset Minification" loading="lazy" decoding="async" />
+                    </div>
+                    <div class="card-body">
+                        <span class="card-tag">Minification</span>
+                        <h3 class="card-title">Asset Minification</h3>
+                        <p class="card-text">Compressing CSS and JavaScript to reduce transfer payload.</p>
+                    </div>
+                </article>
+                <article class="card">
+                    <div class="card-image-wrap">
+                        <img src="images/gallery-3.jpg?v=5" alt="Lazy Loading Observer" loading="lazy" decoding="async" />
+                    </div>
+                    <div class="card-body">
+                        <span class="card-tag">Lazy Loading</span>
+                        <h3 class="card-title">Lazy Loading Observer</h3>
+                        <p class="card-text">Loading images on demand as they enter the viewport.</p>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p>&copy; 2026 CloudScale Web Performance Lab. Fully Optimized.</p>
+    </footer>
 </body>
 </html>
