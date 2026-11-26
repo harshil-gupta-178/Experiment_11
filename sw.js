@@ -1,18 +1,14 @@
-const CACHE_NAME = 'cloudscale-cache-v5';
+const CACHE_NAME = 'cloudscale-cache-v6';
 
 const PRECACHE_ASSETS = [
     './',
     './index.html',
-    './css/style.min.css',
-    './js/bundle.min.js',
+    './css/style.css',
+    './js/app.js',
     './images/hero.jpg',
-    './images/hero.svg',
     './images/gallery-1.png',
-    './images/gallery-1.svg',
     './images/gallery-2.png',
-    './images/gallery-2.svg',
-    './images/gallery-3.jpg',
-    './images/gallery-3.svg'
+    './images/gallery-3.jpg'
 ];
 
 self.addEventListener('install', (event) => {

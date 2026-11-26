@@ -1,9 +1,9 @@
 # Experiment 11: Website Performance Optimization
 
-Minimalist web application demonstrating three core frontend performance optimizations:
-1. **Caching** – HTTP Cache-Control headers with ETags and offline Service Worker caching.
-2. **Minification** – Combined, minified, and deferred CSS and JavaScript bundles.
-3. **Lazy Loading** – Progressive image loading on demand via `loading="lazy"` and `decoding="async"`.
+A minimalist web application implementing 3 core frontend performance optimizations:
+1. **Caching** – HTTP Cache-Control headers, ETags, and Service Worker offline caching.
+2. **Minification** – Bundled and minified CSS (`style.css`) and deferred JavaScript (`app.js`).
+3. **Lazy Loading** – Progressive image loading with native `loading="lazy"` and `decoding="async"`.
 
 ---
 
@@ -11,36 +11,36 @@ Minimalist web application demonstrating three core frontend performance optimiz
 
 ```text
 Experiment_11/
-├── index.html          # Entry point
+├── index.html          # Web application entry point
 ├── sw.js               # Service Worker cache handler
-├── server.js           # Lightweight HTTP server with ETag & gzip
-├── build.js            # Bundle & compression inspection
-├── package.json        # Project metadata
+├── server.js           # Local HTTP server with caching & gzip
+├── package.json        # Project metadata & start script
 ├── README.md           # Documentation
+│
 ├── css/
-│   └── style.min.css   # Minified single stylesheet
+│   └── style.css       # Minified stylesheet
+│
 ├── js/
-│   └── bundle.min.js   # Deferred JavaScript bundle
+│   └── app.js          # Deferred script bundle
+│
 └── images/
     ├── hero.jpg        # Hero network diagram
     ├── gallery-1.png   # Caching architecture
     ├── gallery-2.png   # Minification pipeline
-    └── gallery-3.jpg   # Lazy loading observer
+    └── gallery-3.jpg   # Lazy loading diagram
 ```
 
 ---
 
-## Quick Start
+## How to Run
 
 ```bash
-# Start local server
+# Install dependencies (none required, zero dependencies)
 npm start
-
-# Run build bundle inspection
-npm run build
 ```
+Visit: `http://localhost:3000`
 
 ---
 
-## Live Deployment
+## Live Demo
 - **GitHub Pages:** [https://harshil-gupta-178.github.io/Experiment_11/](https://harshil-gupta-178.github.io/Experiment_11/)
