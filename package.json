@@ -1,21 +1,17 @@
 {
   "name": "experiment-11-website-optimization",
   "version": "1.0.0",
-  "description": "Experiment 11: Optimize an existing website by implementing caching, minification of CSS/JS, and lazy loading of images",
+  "description": "Experiment 11: Website optimization using Caching, Minification, and Lazy Loading",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "build": "node build.js",
-    "generate-assets": "node scripts/generate-assets.js"
+    "build": "node build.js"
   },
   "keywords": [
     "performance",
     "caching",
     "minification",
-    "lazy-loading",
-    "service-worker",
-    "core-web-vitals"
+    "lazy-loading"
   ],
-  "author": "Web Performance Lab",
   "license": "MIT"
 }

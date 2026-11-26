@@ -1,11 +1,11 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
-const zlib = require('zlib');
 const crypto = require('crypto');
+const zlib = require('zlib');
 
-const DEFAULT_PORT = parseInt(process.env.PORT, 10) || 3000;
-const PUBLIC_DIR = path.join(__dirname, 'public');
+const PORT = parseInt(process.env.PORT, 10) || 3000;
+const ROOT_DIR = __dirname;
 
 const MIME_TYPES = {
     '.html': 'text/html; charset=utf-8',
@@ -15,87 +15,30 @@ const MIME_TYPES = {
     '.svg': 'image/svg+xml',
     '.png': 'image/png',
     '.jpg': 'image/jpeg',
-    '.jpeg': 'image/jpeg',
-    '.webp': 'image/webp',
-    '.ico': 'image/x-icon'
+    '.jpeg': 'image/jpeg'
 };
 
-function generateETag(contentBuffer) {
-    return '"' + crypto.createHash('md5').update(contentBuffer).digest('hex') + '"';
-}
+function startServer(port) {
+    const server = http.createServer((req, res) => {
+        let pathname = decodeURIComponent(new URL(req.url, `http://${req.headers.host}`).pathname);
+        if (pathname === '/' || pathname === '') pathname = '/index.html';
 
-function requestHandler(req, res) {
-    const parsedUrl = new URL(req.url, `http://${req.headers.host}`);
-    let pathname = decodeURIComponent(parsedUrl.pathname);
+        const filePath = path.join(ROOT_DIR, pathname);
+        if (!fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
+            res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
+            return res.end('404 Not Found');
+        }
 
-    if (pathname === '/api/audit') {
-        const auditData = {
-            timestamp: new Date().toISOString(),
-            metrics: {
-                unoptimized: {
-                    cssFiles: 3,
-                    jsFiles: 3,
-                    eagerImages: 4,
-                    cachingPolicy: 'no-store, no-cache',
-                    compression: 'None',
-                    totalCssBytes: 6085,
-                    totalJsBytes: 3830
-                },
-                optimized: {
-                    cssFiles: 1,
-                    jsFiles: 1,
-                    lazyImages: 3,
-                    eagerImages: 1,
-                    cachingPolicy: 'public, max-age=31536000, immutable',
-                    compression: 'Gzip',
-                    totalCssBytes: 4707,
-                    totalJsBytes: 2934,
-                    cssSavingsPercent: '22.6%',
-                    jsSavingsPercent: '23.4%',
-                    overallBundleSavings: '22.9%'
-                }
-            }
+        const ext = path.extname(filePath).toLowerCase();
+        const contentType = MIME_TYPES[ext] || 'application/octet-stream';
+        const fileContent = fs.readFileSync(filePath);
+        const etag = '"' + crypto.createHash('md5').update(fileContent).digest('hex') + '"';
+
+        const headers = {
+            'Content-Type': contentType,
+            'X-Content-Type-Options': 'nosniff',
+            'ETag': etag
         };
-        res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify(auditData, null, 2));
-        return;
-    }
-
-    if (pathname === '/' || pathname === '/index.html') {
-        pathname = '/optimized/index.html';
-    } else if (pathname.endsWith('/')) {
-        pathname += 'index.html';
-    }
-
-    let filePath = path.join(PUBLIC_DIR, pathname);
-
-    if (fs.existsSync(filePath) && fs.statSync(filePath).isDirectory()) {
-        filePath = path.join(filePath, 'index.html');
-    }
-
-    if (!fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
-        res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8' });
-        res.end(`<h1>404 Not Found</h1><p>The path <code>${pathname}</code> was not found.</p><p><a href="/">Return to Performance Hub</a></p>`);
-        return;
-    }
-
-    const ext = path.extname(filePath).toLowerCase();
-    const contentType = MIME_TYPES[ext] || 'application/octet-stream';
-    const fileStat = fs.statSync(filePath);
-    const fileContent = fs.readFileSync(filePath);
-
-    const isOptimizedRoute = pathname.startsWith('/optimized/');
-    const isUnoptimizedRoute = pathname.startsWith('/unoptimized/');
-
-    const headers = {
-        'Content-Type': contentType,
-        'X-Content-Type-Options': 'nosniff'
-    };
-
-    if (isOptimizedRoute) {
-        const etag = generateETag(fileContent);
-        headers['ETag'] = etag;
-        headers['Last-Modified'] = fileStat.mtime.toUTCString();
 
         if (ext === '.html') {
             headers['Cache-Control'] = 'no-cache, must-revalidate';
@@ -103,78 +46,34 @@ function requestHandler(req, res) {
             headers['Cache-Control'] = 'public, max-age=31536000, immutable';
         }
 
-        const ifNoneMatch = req.headers['if-none-match'];
-        const ifModifiedSince = req.headers['if-modified-since'];
-
-        if (ifNoneMatch && ifNoneMatch === etag) {
+        if (req.headers['if-none-match'] === etag) {
             res.writeHead(304, headers);
-            res.end();
-            return;
-        }
-
-        if (ifModifiedSince) {
-            const ifModifiedDate = new Date(ifModifiedSince);
-            if (!isNaN(ifModifiedDate.getTime()) && fileStat.mtime <= ifModifiedDate) {
-                res.writeHead(304, headers);
-                res.end();
-                return;
-            }
+            return res.end();
         }
 
         const acceptEncoding = req.headers['accept-encoding'] || '';
-        const isCompressible = contentType.startsWith('text/') || 
-                               contentType.includes('javascript') || 
-                               contentType.includes('json') || 
-                               contentType.includes('svg');
-
-        if (isCompressible && acceptEncoding.includes('gzip')) {
+        if (acceptEncoding.includes('gzip') && (contentType.startsWith('text/') || contentType.includes('javascript') || contentType.includes('svg'))) {
             headers['Content-Encoding'] = 'gzip';
-            headers['Vary'] = 'Accept-Encoding';
-            zlib.gzip(fileContent, (err, compressedBuffer) => {
-                if (err) {
-                    headers['Content-Length'] = fileContent.length;
-                    res.writeHead(200, headers);
-                    res.end(fileContent);
-                } else {
-                    headers['Content-Length'] = compressedBuffer.length;
-                    res.writeHead(200, headers);
-                    res.end(compressedBuffer);
-                }
-            });
-            return;
+            res.writeHead(200, headers);
+            return res.end(zlib.gzipSync(fileContent));
         }
 
-    } else if (isUnoptimizedRoute) {
-        headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, proxy-revalidate';
-        headers['Pragma'] = 'no-cache';
-        headers['Expires'] = '0';
-    } else {
-        headers['Cache-Control'] = 'no-cache';
-    }
-
-    headers['Content-Length'] = fileContent.length;
-    res.writeHead(200, headers);
-    res.end(fileContent);
-}
-
-function startServer(port) {
-    const srv = http.createServer(requestHandler);
-    srv.listen(port, () => {
-        console.log(`Server running on port ${port}`);
-        console.log(`- Performance Hub: http://localhost:${port}/`);
-        console.log(`- Unoptimized:    http://localhost:${port}/unoptimized/`);
-        console.log(`- Optimized:      http://localhost:${port}/optimized/`);
-        console.log(`- Audit API:      http://localhost:${port}/api/audit`);
+        headers['Content-Length'] = fileContent.length;
+        res.writeHead(200, headers);
+        res.end(fileContent);
     });
 
-    srv.on('error', (err) => {
+    server.listen(port, () => {
+        console.log(`Server running at http://localhost:${port}/`);
+    });
+
+    server.on('error', (err) => {
         if (err.code === 'EADDRINUSE') {
-            const nextPort = port === 3000 ? 3001 : (port === 3001 ? 8080 : port + 1);
-            startServer(nextPort);
+            startServer(port + 1);
         } else {
             console.error('Server error:', err);
         }
     });
 }
 
-startServer(DEFAULT_PORT);
+startServer(PORT);
