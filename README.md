@@ -11,23 +11,20 @@ A minimalist web application implementing 3 core frontend performance optimizati
 
 ```text
 Experiment_11/
-├── index.html          # Web application entry point
-├── sw.js               # Service Worker cache handler
-├── server.js           # Local HTTP server with caching & gzip
-├── package.json        # Project metadata & start script
-├── README.md           # Documentation
-│
+├── index.html
+├── sw.js
+├── server.js
+├── package.json
+├── README.md
 ├── css/
-│   └── style.css       # Minified stylesheet
-│
+│   └── style.css
 ├── js/
-│   └── app.js          # Deferred script bundle
-│
+│   └── app.js
 └── images/
-    ├── hero.jpg        # Hero network diagram
-    ├── gallery-1.png   # Caching architecture
-    ├── gallery-2.png   # Minification pipeline
-    └── gallery-3.jpg   # Lazy loading diagram
+    ├── hero.jpg
+    ├── gallery-1.png
+    ├── gallery-2.png
+    └── gallery-3.jpg
 ```
 
 ---
